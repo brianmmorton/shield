@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt'
 
-export function encryptPassword (password, salt) {
+export function encryptPassword (password) {
   return bcrypt.hashSync(password, bcrypt.genSaltSync(10), null);
 }
 
