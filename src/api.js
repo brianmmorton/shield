@@ -14,11 +14,11 @@ import cluster from 'cluster';
 const pgSession = require('connect-pg-simple')(session);
 
 import bootstrapApiRoutes from './routes/index'
-import { JSON_WBT_SECRET, IS_PROD } from './config'
+import { JSON_WBT_SECRET, PRIVATE_SESSION_KEY, IS_PROD } from './config'
 import { errorHandler } from './utils'
 
 import dbModels from './models/index'
-import { MAIN_DB_URL } from './config/db'
+import { DB_URL } from './config'
 import './config/passport'
 
 
@@ -28,7 +28,6 @@ require('pg-parse-float')(pg);
 
 const numCPUs = process.env.WEB_CONCURRENCY || 1;
 const redisUri = process.env.REDIS_URL || 'redis://127.0.0.1:6379';
-const tortoise = new Tortoise(RABBITMQ_BIGWIG_RX_URL);
 
 console.log(`Registered ${numCPUs} cpus. Starting servers...`);
 
@@ -110,7 +109,7 @@ async function startApp () {
   app.use(session({
     store: new pgSession({
       pg: pg,
-      conString: MAIN_DB_URL,
+      conString: DB_URL,
       tableName: 'user_sessions',
     }),
     secret: PRIVATE_SESSION_KEY,
@@ -121,18 +120,13 @@ async function startApp () {
   app.use(passport.initialize());
   app.use(passport.session());
 
-  console.log('Syncing the databases...');
-  /* bootstrap the databases */
-  const startMainDb = dbModels.main.sequelize.sync()
-  const startActivitiesDb = dbModels.activities.sequelize.sync()
+  const startMainDb = dbModels.sequelize.sync()
 
-  // inititalize the workers so that they can send messages to the
-  // worker processes
-  const [mainDb, activitiesDb] = await Promise.all([startMainDb, startActivitiesDb]);
+  // add other dbs to sync in here
+  await Promise.all([startMainDb]);
 
-  console.log('Databases synced...');
   /* add in api routes */
-  bootstrapApiRoutes(app, activitiesDb, mainDb)
+  bootstrapApiRoutes(app)
 
   app.use((err, req, res, next) => {
     if (err) {

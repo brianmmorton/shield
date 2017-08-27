@@ -1,5 +1,5 @@
 export const IS_PROD = process.env.NODE_ENV === 'production';
-export const localConfig = IS_PROD ? {} : require('../../../.local-config'); // keep in .gitignore
+export const localConfig = IS_PROD ? {} : require('../../.local-config'); // keep in .gitignore
 
 export const PORT = process.env.PORT || 3000
 

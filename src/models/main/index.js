@@ -1,8 +1,8 @@
 import fs from 'fs'
 import path from 'path'
 import Sequelize from 'sequelize'
-import { MAIN_DB_URL } from '../../config/db'
-var sequelize = new Sequelize(MAIN_DB_URL)
+import { DB_URL } from '../../config'
+var sequelize = new Sequelize(DB_URL)
 var db        = {}
 
 fs.readdirSync(__dirname)

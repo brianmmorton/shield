@@ -6,7 +6,7 @@ import { IS_PROD } from '../config';
 
 const dialectOptions = IS_PROD ? { ssl: 'require' } : {}
 
-const mainSQL = new Sequelize(MAIN_DB_URL, {
+const mainSQL = new Sequelize(DB_URL, {
   logging: false,
   native: true,
   dialectOptions,
@@ -17,7 +17,7 @@ const db = {}
 fs.readdirSync(`${__dirname}/main`)
   .filter(file => file.indexOf('.') !== 0 && (file !== 'index.js'))
   .forEach(file => {
-    const model = mainSQL.import(path.join(fileLocation, file))
+    const model = mainSQL.import(path.join(__dirname, 'main', file))
     db[model.name] = model
   });
 
