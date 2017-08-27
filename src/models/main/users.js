@@ -30,6 +30,11 @@ export default (sequelize, DataTypes) => {
       field: 'avatar_url',
       allowNull: true
     },
+    hashedPassword: {
+      type: DataTypes.TEXT,
+      field: 'hashed_password',
+      allowNull: false,
+    }
   }, {
     tableName: 'users',
     updatedAt: 'updated_at',
