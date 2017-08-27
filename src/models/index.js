@@ -3,6 +3,7 @@ import fs from 'fs'
 import path from 'path'
 import { DB_URL } from '../config'
 import { IS_PROD } from '../config';
+import bootstrapTables from './bootstrap';
 
 const dialectOptions = IS_PROD ? { ssl: 'require' } : {}
 
@@ -38,5 +39,7 @@ Object
   })
 
 db.sequelize = mainSQL
+
+bootstrapTables(mainSQL);
 
 export default db
