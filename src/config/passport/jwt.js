@@ -2,9 +2,7 @@ import passport from 'passport';
 const JwtStrategy = require('passport-jwt').Strategy;
 const ExtractJwt = require('passport-jwt').ExtractJwt;
 import { JSON_WBT_SECRET } from '../index';
-import models from '../../models';
-
-const { User } = models;
+import { User } from '../../models';
 
 const opts = {
   jwtFromRequest: ExtractJwt.fromAuthHeader(),

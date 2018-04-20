@@ -22,7 +22,7 @@ router.route('/logout')
   .get(async (req, res, next) => {
     req.logout();
     req.session.destroy();
-    res.redirect('/login');
+    res.status(200).send();
   });
 
 export default router

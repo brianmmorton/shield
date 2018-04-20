@@ -1,55 +1,23 @@
 import passport from 'passport';
-import models from '../models';
-import { UniqueConstraintError } from 'sequelize';
-
-const { ErrorLog } = models;
+import { ValidationError } from 'express-validator';
 
 export async function errorHandler (error, req, res) {
-  console.error(' *** ERROR *** ', error, error instanceof ServerError)
-  if (error instanceof ServerError) {
-    return res.status(error.code).send(error.err)
+  console.error(' *** ERROR *** ', error)
+  if (error && error.errors) {
+    res.status(400).json(error.errors);
   }
-  else if (error instanceof UniqueConstraintError) {
-    return res.status(409).json({
-      errors: error.errors,
-    })
+  else if (error instanceof ServerError) {
+    res.status(error.code).send(error.err);
   }
-
-  try {
-    const text = error instanceof String ? error : JSON.stringify(error);
-    const dbError = await ErrorLog.findOne({
-      where: { text },
-    });
-
-    if (dbError) {
-      await dbError.updateAttributes({
-        text,
-        date: new Date(),
-        count: dbError.dataValues.count + 1,
-        process: 'server',
-        user_id: req.user ? req.user.id : null,
-      });
-    }
-    else {
-      await ErrorLog.create({
-        text,
-        date: new Date(),
-        count: 1,
-        process: 'server',
-        user_id: req.user ? req.user.id : null,
-      });
-    }
+  else if (error.message) {
+    res.status(500).send(error.message);
   }
-  catch (err) {
-    console.log(err);
-    // do nothing
+  else if (typeof error === 'string') {
+    res.status(500).send(error);
   }
-
-  if (typeof error === 'string') {
-    return res.status(500).send(error)
+  else {
+    res.status(500).send('Unknown server error occurred');
   }
-
-  return res.status(500).json(error)
 }
 
 export class ServerError {

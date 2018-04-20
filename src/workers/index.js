@@ -1,9 +1,6 @@
 import kue from 'kue';
 import Worker from './worker';
 import example from './example';
-import models from '../models';
-
-const { User } = models;
 
 /*
   Init queue
@@ -20,13 +17,11 @@ process.once('SIGTERM', () => {
   });
 });
 
-export const exampleWorker = new Worker(queue, {
-  perform: example,
-  name: 'example',
-  tab: '* * * * *',
-  enqueue: (cb) => User.findAll().then(users => users.forEach(cb));
-});
+// export const exampleWorker = new Worker(queue, {
+//   perform: example,
+//   name: 'example',
+//   tab: '* * * * *',
+//   enqueue: (cb) => User.findAll().then(users => users.forEach(cb));
+// });
 
-export default [
-  exampleWorker,
-];
+export default [];
