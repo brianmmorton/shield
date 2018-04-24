@@ -6,6 +6,7 @@ import passport from 'passport';
 import morgan from 'morgan';
 import mongoose from 'mongoose';
 
+mongoose.set('debug', true);
 mongoose.Promise = require('bluebird');
 
 import './config/passport';
@@ -38,11 +39,13 @@ app.use((err, req, res, next) => {
   next();
 });
 
-
 mongoose.connect(process.env.DB_URL, {
   autoReconnect: true,
-})
-.then(() => listen(), err => console.log(err));
+});
+
+mongoose.connection.on('error', console.error.bind(console, 'connection error:'));
+mongoose.connection.once('open', listen);
+
 
 function listen () {
   app.listen(app.get('port'), err => {

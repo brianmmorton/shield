@@ -3,6 +3,7 @@
 import { compose } from 'recompose'
 import { connect } from 'react-redux'
 import { fetch as fetchLogs } from 'store/logs'
+import { withRouter } from 'react-router'
 
 import Logs from './Logs';
 
@@ -14,5 +15,6 @@ export default compose(
   connect(
     mapStateToProps,
     mapActionsToProps,
-  )
+  ),
+  withRouter
 )(Logs)

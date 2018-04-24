@@ -7,10 +7,11 @@ import datetime
 import json
 
 headers = {
-    'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcmVhdGVkQXQiOiIyMDE4LTA0LTIxVDE2OjE2OjMyLjQzNloiLCJfaWQiOiI1YWZhZjc0MC00NTdmLTExZTgtOWUzZi0zZGVlZGQxYTBiY2YiLCJlbWFpbCI6ImJyaWFubW1vcnRvbkBnbWFpbC5jb20iLCJfX3YiOjAsImlhdCI6MTUyNDQ0NzMwMCwiZXhwIjoxNTI5NjMxMzAwfQ.ZLap71KZN1B6Sv-1vsV0DvotKr_QpYpBm83uAY3_I68',
+    'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcmVhdGVkQXQiOiIyMDE4LTA0LTI0VDAzOjIyOjE1LjEzM1oiLCJfaWQiOiI1YWRlYTJlN2M2ZGViZTIzOThmMWI2NTAiLCJlbWFpbCI6ImJyaWFubW1vcnRvbkBnbWFpbC5jb20iLCJfX3YiOjAsImlhdCI6MTUyNDU0MDE0MCwiZXhwIjoxNTI5NzI0MTQwfQ.q3yrLElzE6hd1ZMLiPteOqmtIK8HVUZp0t-rORNE7qE',
     'Content-Type': 'application/json'
 }
-DEVICE_ID = "ab312d70-45c9-11e8-a974-7f46c9434af0"
+
+DEVICE_ID = "5adea79bace06e25d8f85182"
 
 def read_in_chunks(file_object, chunk_size=65536):
     while True:

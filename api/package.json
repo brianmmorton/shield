@@ -9,36 +9,17 @@
   },
   "main": "bin/index.js",
   "scripts": {
-    "start": "better-npm-run start-prod-api",
-    "worker": "node ./bin/worker.js",
-    "scheduler": "node ./bin/scheduler.js",
+    "start": "nodemon --exec babel-node src/api.js",
+    "worker": "nodemon --exec babel-node src/worker.js",
+    "scheduler": "nodemon --exec babel-node src/scheduler.js",
     "lint": "eslint -c .eslintrc src",
-    "dev": "better-npm-run start-dev-api",
+    "dev": "nodemon --exec babel-node src/api.js",
     "migrate": "sequelize db:migrate"
-  },
-  "betterScripts": {
-    "start-prod-api": {
-      "command": "nodemon ./bin/index.js",
-      "env": {
-        "NODE_PATH": "./src",
-        "NODE_ENV": "production",
-        "APIPORT": 3030,
-        "BLUEBIRD_WARNINGS": 0
-      }
-    },
-    "start-dev-api": {
-      "command": "nodemon ./bin/index.js",
-      "env": {
-        "NODE_PATH": "./src",
-        "NODE_ENV": "development",
-        "APIPORT": 3030,
-        "BLUEBIRD_WARNINGS": 0
-      }
-    }
   },
   "dependencies": {
     "autoprefixer-loader": "^3.1.0",
     "aws-sdk": "^2.226.1",
+    "babel-cli": "^6.26.0",
     "babel-core": "^6.5.2",
     "babel-eslint": "^5.0.0-beta6",
     "babel-plugin-add-module-exports": "^0.1.2",
@@ -46,7 +27,9 @@
     "babel-plugin-transform-decorators-legacy": "^1.3.4",
     "babel-plugin-typecheck": "^3.9.0",
     "babel-polyfill": "^6.3.14",
+    "babel-preset-env": "^1.6.1",
     "babel-preset-es2015": "^6.3.13",
+    "babel-preset-es2017": "^6.24.1",
     "babel-preset-stage-0": "^6.3.13",
     "babel-register": "^6.3.13",
     "babel-runtime": "^6.3.19",
@@ -74,7 +57,7 @@
     "minimist": "^1.2.0",
     "mocha": "^2.3.3",
     "moment-timezone": "https://registry.npmjs.org/moment-timezone/-/moment-timezone-0.5.13.tgz",
-    "mongoose": "^5.0.15",
+    "mongoose": "^5.0.16",
     "mongoose-timezone": "^1.1.0",
     "morgan": "^1.7.0",
     "multer": "^1.3.0",

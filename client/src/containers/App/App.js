@@ -25,7 +25,6 @@ export default class App extends Component {
         <div className="App">
           <header className="App-header">
             <div className="App-title">Logs</div>
-            {!!user.data && <Link to='/logs'>Logs</Link>}
           </header>
           {this.props.routes}
         </div>

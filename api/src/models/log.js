@@ -20,8 +20,16 @@ const Log = new mongoose.Schema({
     },
     required: [true, 'End date required'],
   },
+  duration: {
+    type: Number,
+    validate: {
+      validator: d => !isNaN(Number(d)),
+      message: 'Duration must be a number',
+    },
+    required: [true, 'Duration is required'],
+  },
   device: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
     required: [true, 'Device id is required'],
     ref: 'Device',
   },
@@ -46,5 +54,25 @@ const Log = new mongoose.Schema({
 
 Log.index({ loc: '2dsphere' });
 Log.plugin(timeZone);
+
+Log.pre('validate', function (next) {
+  if (!this.duration) {
+    this.duration = Math.abs(moment(this.start).diff(moment(this.end), 'seconds'));
+  }
+  next()
+})
+
+Log.pre('save', function (next) {
+  if (!this.duration) {
+    this.duration = Math.abs(moment(this.start).diff(moment(this.end), 'seconds'));
+  }
+  if (!(this.start instanceof Date)) {
+    this.start = new Date(this.start);
+  }
+  if (!(this.end instanceof Date)) {
+    this.end = new Date(this.end);
+  }
+  next()
+})
 
 export default mongoose.model('Log', Log);
