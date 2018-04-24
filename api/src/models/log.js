@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import uuid from 'uuid';
 import moment from 'moment';
 import timeZone from 'mongoose-timezone';
+import { isUUID } from 'validator';
 
 const Log = new mongoose.Schema({
   start: {
@@ -29,9 +30,18 @@ const Log = new mongoose.Schema({
     required: [true, 'Duration is required'],
   },
   device: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: [true, 'Device id is required'],
-    ref: 'Device',
+    id: {
+      type: String,
+      required: [true, 'Device uuid is required'],
+      validate: {
+        validator: d => isUUID(d),
+        message: 'Device id should be a uuid',
+      },
+    },
+    generation: {
+      type: Number,
+      required: [true, 'Device generation is required'],
+    },
   },
   createdAt: {
     type: Date,

@@ -28,7 +28,7 @@ export default class Logs extends Component {
 
     return (
       <div style={{ width: '100%', padding: 20 }}>
-        <div style={{ marginBottom: 15 }}>
+        <div style={{ marginBottom: 15, display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: 900 }}>
           <DatePicker
             placeholder='Start Time'
             disabled={logs.loading}
@@ -100,13 +100,8 @@ export default class Logs extends Component {
               },
               {
                 title: 'Device Id',
-                dataIndex: 'device._id',
-                key: 'device._id',
-              },
-              {
-                title: 'Type',
-                dataIndex: 'device.type',
-                key: 'device.type',
+                dataIndex: 'device.id',
+                key: 'device.id',
               },
               {
                 title: 'Generation',
@@ -124,6 +119,12 @@ export default class Logs extends Component {
                 dataIndex: 'end',
                 key: 'end',
                 render: d => moment(d).format('ddd MMM Do, hh:mm:ss a')
+              },
+              {
+                title: 'Duration',
+                dataIndex: 'duration',
+                key: 'duration',
+                render: d => `${Math.round(d / 60)} min`
               },
               {
                 title: 'Attachments',

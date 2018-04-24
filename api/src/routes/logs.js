@@ -3,7 +3,7 @@ import moment from 'moment';
 import fs from 'fs';
 import { ServerError } from '../utils';
 import { encryptPassword } from '../utils/crypt';
-import { User, Log, Device, } from '../models/index';
+import { User, Log, } from '../models/index';
 import { s3, } from '../config';
 
 const router = express.Router();
@@ -45,9 +45,8 @@ function validateLogs (req, res, next) {
 router.route('/')
   .get(async (req, res, next) => {
     try {
-      const { start, end, max_duration, min_duration, generation, type } = req.query;
+      const { start, end, max_duration, min_duration, generation, device_id } = req.query;
       const where = {};
-      const whereDevice = {};
 
       if (start) {
         const _start = moment(start);
@@ -82,14 +81,11 @@ router.route('/')
       }
 
       if (generation) {
-        whereDevice.generation = { $in: [generation + ''] }
+        where['device.generation'] = { $in: [generation] }
       }
 
-      if (type) {
-        whereDevice.type = { $in: [type] }
-        if (!['drone'].includes(type)) {
-          throw new ServerError('Invalid device type', 400);
-        }
+      if (device_id) {
+        where['device.id'] = { $in: [device_id] }
       }
 
       const count = await Log.count(where);
@@ -99,7 +95,6 @@ router.route('/')
       }
 
       const logs = await Log.find(where)
-        .populate('device', null, whereDevice)
         .sort('-createdAt')
         .limit(100)
         .exec();
@@ -163,7 +158,7 @@ router.route('/:log_id/attachments')
           const uploadFileRes = await new Promise((resolve, reject) => {
             s3.upload({
               Key: filename,
-              Bucket: `shield.ai/devices/${log.device}/logs/${log._id}`,
+              Bucket: `shield.ai/devices/${log.device.id}/logs/${log._id}`,
               ACL: 'public-read',
               Body: fs.createReadStream('/tmp/' + filename),
               ContentType: 'application/octet-stream',

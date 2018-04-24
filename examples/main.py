@@ -11,7 +11,7 @@ headers = {
     'Content-Type': 'application/json'
 }
 
-DEVICE_ID = "5adea79bace06e25d8f85182"
+DEVICE_ID = "68bd1544-47d6-11e8-842f-0ed5f89f718b"
 
 def read_in_chunks(file_object, chunk_size=65536):
     while True:
@@ -70,7 +70,10 @@ def add_log():
     log = {
         "start": str(datetime.datetime.now() - datetime.timedelta(minutes=30)),
         "end": str(datetime.datetime.now()),
-        "device": DEVICE_ID,
+        "device": {
+            "id": DEVICE_ID,
+            "generation": 1, # This can be read in from a build package
+        },
         "loc": {
             "type": "Point",
             "coordinates": [-117.2382162,32.8286208]
