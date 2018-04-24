@@ -88,8 +88,10 @@ export default class Logs extends Component {
         <Spin spinning={logs.loading}>
           <Table
             expandedRowRender={log =>
-              log.attachments.map(attachment =>
-                <a href={attachment.url} target='_blank'>{attachment.type} {attachment.filename}</a>
+              log.attachments.map((attachment, index) =>
+                <div key={attachment.url} style={{ padding: 6 }}>
+                  {index + 1}. <a href={attachment.url} target='_blank'>{attachment.filename}</a>
+                </div>
               )
             }
             columns={[

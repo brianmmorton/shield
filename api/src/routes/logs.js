@@ -177,6 +177,12 @@ router.route('/:log_id/attachments')
           });
 
           await log.save();
+
+          fs.unlink('/tmp/' + filename, err => {
+            if (err) {
+              console.log(err);
+            }
+          });
         }
         catch (err) {
           console.log(err);
